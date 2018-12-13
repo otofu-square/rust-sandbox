@@ -10,6 +10,15 @@ fn main() -> Result<(), failure::Error> {
     env_logger::init();
     debug!("ferris_watch starting ...");
 
+    let window = pancurses::initscr();
+    struct EndWin;
+    impl Drop for EndWin {
+        fn drop(&mut self) {
+            pancurses::endwin();
+        }
+    };
+    let _endwin = EndWin;
+
     'outer: loop {
         let interrupted = Arc::new(AtomicBool::new(false));
         signal_hook::flag::register(signal_hook::SIGINT, interrupted.clone())?;
@@ -38,12 +47,12 @@ fn main() -> Result<(), failure::Error> {
         let command = matches.values_of("command").unwrap().collect::<Vec<_>>();
         let interval = value_t!(matches, "interval", f64)?;
 
-        debug!("command = {:?}", command);
-        debug!("interval = {:?}", interval);
-
         let output = Command::new(command[0]).args(&command[1..]).output()?;
         let output = String::from_utf8_lossy(&output.stdout);
-        println!("{}", output);
+
+        window.clear();
+        window.printw(output);
+        window.refresh();
 
         let interval10 = (interval * 10.0) as u32;
 
