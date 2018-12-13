@@ -1,6 +1,5 @@
 [package]
-name = "hello_world"
-version = "0.1.0"
-authors = ["otofu-square <yukita@feedforce.jp>"]
 
-[dependencies]
+name = "hello_world"
+version = "0.0.1"
+authors = [ "otofu-square" ]
