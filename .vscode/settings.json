@@ -1,0 +1,5 @@
+{
+  "[rust]": {
+    "editor.defaultFormatter": "rustfmt"
+  }
+}
